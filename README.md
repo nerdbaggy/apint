@@ -27,16 +27,16 @@ wget https://github.com/nerdbaggy/apint/releases/download/3/apint_arm -O apint
 ./apint
 ```
 
- # How to Use
+# How to Use
 Communication with apint is done via a web interface. This isn't RESTFUL its just what I decided to use.
 
 Either a POST or GET request can be used to get the results. POST sends a json payload while GET uses the URL parameters
 
 ## Parameters
-** action ** - [ping, mtr] - Either ping the host or run MTR against the host<br>
-** host ** - The host to interact with<br>
-** rc ** How many requests to send
-** callback ** - Used with jsonp
+**action** - [ping, mtr] - Either ping the host or run MTR against the host<br>
+**host** - The host to interact with<br>
+**rc** How many requests to send<br>
+**callback** - Used with jsonp
 ## POST
 ```
 curl -X POST -d '{"action": "ping", "host": "8.8.8.8", "rc": "3"}' http://localhost:8080
@@ -203,8 +203,8 @@ curl "localhost:8080?action=ping&host=8.8.8.8&rc=3"
 ```
 
 # Errors
-** 200 ** - Everything worked fine<br>
-** 500 ** - Everything else that broke
+**200** - Everything worked fine<br>
+**500** - Everything else that broke
 
-** Status ** - will always equal "ok" if everything worked correctly. If not it will display "error"<br>
-** Message ** - Displays the error that occurred to caused a 500 response
+**Status** - will always equal "ok" if everything worked correctly. If not it will display "error"<br>
+**Message** - Displays the error that occurred to caused a 500 response
