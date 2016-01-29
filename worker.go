@@ -7,7 +7,6 @@ import (
 "strings"
 )
 
-
 type jobInfo struct{
 	Action string
 	Host string
@@ -18,7 +17,6 @@ type pingReturn struct{
   Status string `json:"status"`
   Message string `json:"message,omitempty"`
   Host string `json:"host,omitempty"`
-  Port int `json:"port,omitempty"`
   Stats *StatsJ `json:"stats,omitempty"`
   Rtt *rttJ `json:"rtt,omitempty"`
   Logs []pingLogJ `json:"logs,omitempty"`
@@ -157,6 +155,7 @@ func ping(host string, rc string) (*pingReturn) {
 
 }
 
+//mtr runs mtr against the host
 func mtr(host string, rc string) (*pingReturn) {
   allStructOut := &pingReturn {
     Host: host,
