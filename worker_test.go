@@ -136,7 +136,7 @@ func TestWorkerPingFunc(t *testing.T) {
 
 	var jobTest jobInfo
 	jobTest.Action = "ping"
-	jobTest.Host = "127.0.0.1"
+	jobTest.Host = "8.8.8.8"
 	jobTest.Rc = "3"
 
 	rcInt, err := strconv.Atoi(jobTest.Rc)
