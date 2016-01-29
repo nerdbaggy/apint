@@ -5,7 +5,134 @@ import (
 "testing"
 )
 
-func TestFibFunc(t *testing.T) {
+func TestWorkerFunc(t *testing.T) {
+	var jobTest jobInfo
+	jobTest.Action = "mtr"
+	jobTest.Rc = "2"
+
+	fn := worker(jobTest)
+
+	if fn.Status != "error"{
+		t.Errorf("Expected error, got %s", fn.Status)
+	}
+
+	if fn.Message != "Host is needed"{
+		t.Errorf("Expected no host message, got %s", fn.Message)
+	}
+
+	jobTest.Host = "8.8.8.8"
+	jobTest.Rc = "fsdfs"
+	fn = worker(jobTest)
+
+	if fn.Status != "error"{
+		t.Errorf("Expected error, got %s", fn.Status)
+	}
+
+	if fn.Message != "rc needs to be an integer"{
+		t.Errorf("Expected bad rc message, got %s", fn.Message)
+	}
+
+	jobTest.Rc = "3"
+	jobTest.Action = "fdsfasdfsd"
+	fn = worker(jobTest)
+
+	if fn.Status != "error"{
+		t.Errorf("Expected error, got %s", fn.Status)
+	}
+
+	if fn.Message != "Action not found"{
+		t.Errorf("Expected action not found message, got %s", fn.Message)
+	}
+
+	jobTest.Action = ""
+	fn = worker(jobTest)
+
+	if fn.Status != "error"{
+		t.Errorf("Expected error, got %s", fn.Status)
+	}
+
+	if fn.Message != "Action is needed"{
+		t.Errorf("Expected action needed message, got %s", fn.Message)
+	}
+
+}
+
+func TestWorkerMTRFunc(t *testing.T) {
+	var jobTest jobInfo
+	jobTest.Action = "mtr"
+	jobTest.Host = "8.8.8.8"
+	jobTest.Rc = "2"
+
+	rcInt, err := strconv.Atoi(jobTest.Rc)
+
+	if err != nil{
+		t.Errorf("Error parsing rc: %s", err)
+	}
+
+	fn := worker(jobTest)
+
+	if fn.Status != "ok" {
+		t.Errorf("ok status not returned, got %s", fn.Status)
+	}
+
+	if fn.Message != "" {
+		t.Errorf("Message was returned when it should not of been, got %s", fn.Message)
+	}
+
+	if fn.Host != jobTest.Host {
+		t.Errorf("Host was not returned with the same as sent, got %s", fn.Host)
+	}
+
+	if len(fn.MtrLogs) == 0{
+		t.Errorf("No logs recieved")
+	}
+
+	for k, v := range fn.MtrLogs {
+		if k != v.Id {
+			t.Errorf("ID does not match for number")
+		}
+
+		if v.Host == "" {
+			t.Errorf("No host recieved")
+		}
+
+		if v.Loss == "" {
+			t.Errorf("No lost recieved")
+		}
+
+		if v.Loss == "" {
+			t.Errorf("No lost recieved")
+		}
+
+		if v.Sent != rcInt {
+			t.Errorf("Number of packets sent doesn't match requested, got %d", v.Sent)
+		}
+
+		if v.Last == "" {
+			t.Errorf("No last recieved")
+		}
+
+		if v.Avg == "" {
+			t.Errorf("No average recieved")
+		}
+
+		if v.Best == "" {
+			t.Errorf("No best recieved")
+		}
+
+		if v.Wrst == "" {
+			t.Errorf("No worst recieved")
+		}
+
+		if v.StDev == "" {
+			t.Errorf("No st_deviation recieved")
+		}
+
+	}
+
+}
+
+func TestWorkerPingFunc(t *testing.T) {
 
 	var jobTest jobInfo
 	jobTest.Action = "ping"
