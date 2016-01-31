@@ -19,8 +19,8 @@ type pingReturn struct{
   Host string `json:"host,omitempty"`
   Stats *StatsJ `json:"stats,omitempty"`
   Rtt *rttJ `json:"rtt,omitempty"`
-  Logs []pingLogJ `json:"logs,omitempty"`
-  MtrLogs []mtrJ `json:"logs,omitempty"`
+  Logs []pingLogJ `json:"ping_logs,omitempty"`
+  MtrLogs []mtrJ `json:"mtr_logs,omitempty"`
 }
 
 type rttJ struct {
@@ -59,7 +59,7 @@ type mtrJ struct {
 
 var rttR = regexp.MustCompile(`rtt min\/avg\/max\/mdev = (.*)\/(.*)\/(.*)\/(.*) ms`)
 var statsR = regexp.MustCompile(`(\d*) packets transmitted, (\d*) received, (\d*)% packet loss, time (\d*)ms`)
-var logR = regexp.MustCompile(`(.*) bytes from (.*): icmp_req=(.*) ttl=(.*) time=(.*) ms`)
+var logR = regexp.MustCompile(`(.+) bytes from (.+): icmp_[sq]eq=(.+) ttl=(.+) time=(.+) ms`)
 var mtrR = regexp.MustCompile(`\S+.\|-- (\S+)\s*(\S+)%?\s*(\d+)\s*(\S+)\s*(\S+)\s*(\S+)\s*(\S+)\s*(\S+)`)
 
 func worker(ji jobInfo) (*pingReturn) {
@@ -136,7 +136,7 @@ func ping(host string, rc string) (*pingReturn) {
 
   // Gets all the ping logs
   logRes:= logR.FindAllStringSubmatch(string(out), -1)
-  for _, v := range logRes {
+	for _, v := range logRes {
     iBytes, err := strconv.Atoi(v[1])
     iReq, err := strconv.Atoi(v[3])
     iTtl, err := strconv.Atoi(v[4])
