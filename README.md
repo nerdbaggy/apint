@@ -1,4 +1,5 @@
-# apint
+# apint [![Build Status](https://travis-ci.org/nerdbaggy/apint.svg?branch=master)](https://travis-ci.org/nerdbaggy/apint)
+
 apint - Use common network tools over an API and get results via json
 
 apint returns the full output of Ping and MTR into json format with parameters.
